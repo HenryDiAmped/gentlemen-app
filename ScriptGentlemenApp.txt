@@ -1,0 +1,280 @@
+-- Simplified DB barberia_db
+CREATE TABLE IF NOT EXISTS usuarios (
+  id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+  celular VARCHAR(9) NOT NULL UNIQUE,
+  dni VARCHAR(20) NOT NULL UNIQUE,
+  apellidos VARCHAR(45) NOT NULL,
+  nombres VARCHAR(45) NOT NULL,
+  email VARCHAR(100) UNIQUE,
+  contrasena VARCHAR(255) NOT NULL,
+  tipo_usuario ENUM('ADMINISTRADOR','BARBERO','CLIENTE') NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS administradores (
+  id_admin INT AUTO_INCREMENT PRIMARY KEY,
+  id_usuario INT NOT NULL UNIQUE,
+  FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS sedes (
+  id_sede INT AUTO_INCREMENT PRIMARY KEY,
+  direccion VARCHAR(45) NOT NULL UNIQUE,
+  nombre_sede VARCHAR(45) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS barberos (
+  id_barbero INT AUTO_INCREMENT PRIMARY KEY,
+  id_sede INT NOT NULL,
+  id_usuario INT NOT NULL UNIQUE,
+  FOREIGN KEY (id_sede) REFERENCES sedes(id_sede),
+  FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS clientes (
+  id_cliente INT AUTO_INCREMENT PRIMARY KEY,
+  id_usuario INT NOT NULL UNIQUE,
+  FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS tipo_servicios (
+  id_tipo_servicio INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(45) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS servicios (
+  id_servicio INT AUTO_INCREMENT PRIMARY KEY,
+  id_tipo_servicio INT NOT NULL,
+  tarifa DECIMAL(5,2) NOT NULL,
+  nombre VARCHAR(150) NOT NULL UNIQUE,
+  detalle VARCHAR(255) NOT NULL,
+  FOREIGN KEY (id_tipo_servicio) REFERENCES tipo_servicios(id_tipo_servicio)
+);
+
+CREATE TABLE IF NOT EXISTS comentarios (
+  id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+  contenido VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS categorias (
+  id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(45) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS productos (
+  id_producto INT AUTO_INCREMENT PRIMARY KEY,
+  id_categoria INT NOT NULL,
+  precio DECIMAL(5,2) NOT NULL,
+  stock INT NOT NULL,
+  nombre VARCHAR(150) NOT NULL UNIQUE,
+  descripcion VARCHAR(255),
+  FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+);
+
+CREATE TABLE IF NOT EXISTS pedidos (
+  id_pedido INT AUTO_INCREMENT PRIMARY KEY,
+  fecha_pedido DATE NOT NULL,
+  subtotal DECIMAL(7,2) NOT NULL,
+  total DECIMAL(7,2) NOT NULL,
+  direccion VARCHAR(255) NOT NULL,
+  estado ENUM('PAGADO','PENDIENTE_PAGO') NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS carritos (
+  id_carrito INT AUTO_INCREMENT PRIMARY KEY,
+  cantidad INT NOT NULL,
+  fecha_creacion DATE NOT NULL,
+  id_cliente INT NOT NULL,
+  id_pedido INT NOT NULL,
+  id_producto INT NOT NULL,
+  estado ENUM('APROBADO','NO_APROBADO') NOT NULL,
+  FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente) ON DELETE CASCADE,
+  FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido) ON DELETE CASCADE,
+  FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS horarios_atencion (
+  id_horario_atencion INT AUTO_INCREMENT PRIMARY KEY,
+  id_barbero INT NOT NULL,
+  fecha DATE NOT NULL,
+  hora TIME(6) NOT NULL,
+  estado ENUM('FERIADO','OTRO','RESERVADO') NOT NULL,
+  FOREIGN KEY (id_barbero) REFERENCES barberos(id_barbero)
+);
+
+CREATE TABLE IF NOT EXISTS citas (
+  id_cita INT AUTO_INCREMENT PRIMARY KEY,
+  id_cliente INT NOT NULL,
+  id_comentario INT DEFAULT NULL UNIQUE,
+  id_horario_atencion INT NOT NULL UNIQUE,
+  id_servicio INT NOT NULL,
+  estado ENUM('ATENDIDO','POR_ATENDER') NOT NULL,
+  FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente) ON DELETE CASCADE,
+  FOREIGN KEY (id_comentario) REFERENCES comentarios(id_comentario) ON DELETE SET NULL,
+  FOREIGN KEY (id_horario_atencion) REFERENCES horarios_atencion(id_horario_atencion),
+  FOREIGN KEY (id_servicio) REFERENCES servicios(id_servicio)
+);
+
+INSERT INTO usuarios (celular, dni, apellidos, nombres, email, contrasena, tipo_usuario) VALUES ('999999999', '00000007', 'Admin', 'Admin', 'admin@gentlemen.com', 'Admin123', 'ADMINISTRADOR');
+
+
+INSERT INTO usuarios (celular, dni, apellidos, nombres, email, contrasena, tipo_usuario) VALUES ('900222222', '11111111', 'Ramírez', 'Jair', 'jair@gentlemen.com', 'Barbero123', 'BARBERO');
+
+
+INSERT INTO usuarios (celular, dni, apellidos, nombres, email, contrasena, tipo_usuario) VALUES ('900333333', '22222222', 'Perez', 'Vyro', 'vyro@gentlemen.com', 'Barbero123', 'BARBERO');
+
+
+INSERT INTO usuarios (celular, dni, apellidos, nombres, email, contrasena, tipo_usuario) VALUES ('900444444', '33333333', 'Torres', 'Christian', 'christian@gentlemen.com', 'Barbero123', 'BARBERO');
+
+
+INSERT INTO usuarios (celular, dni, apellidos, nombres, email, contrasena, tipo_usuario) VALUES ('900555555', '44444444', 'Gómez', 'Luis', 'luis@gentlemen.com', 'Barbero123', 'BARBERO');
+
+
+INSERT INTO usuarios (celular, dni, apellidos, nombres, email, contrasena, tipo_usuario) VALUES ('900666666', '55555555', 'Salazar', 'Andrés', 'andres@gentlemen.com', 'Barbero123', 'BARBERO');
+
+
+INSERT INTO usuarios (celular, dni, apellidos, nombres, email, contrasena, tipo_usuario) VALUES ('900777777', '66666666', 'Rojas', 'Kevin', 'kevin@gentlemen.com', 'Barbero123', 'BARBERO');
+
+
+INSERT INTO usuarios (celular, dni, apellidos, nombres, email, contrasena, tipo_usuario) VALUES ('900888888', '77777777', 'Quispe', 'Daniel', 'daniel@gentlemen.com', 'Barbero123', 'BARBERO');
+
+
+INSERT INTO usuarios (celular, dni, apellidos, nombres, email, contrasena, tipo_usuario) VALUES ('900999999', '88888888', 'Mendoza', 'Carlos', 'carlos@gentlemen.com', 'Barbero123', 'BARBERO');
+
+
+INSERT INTO usuarios (celular, dni, apellidos, nombres, email, contrasena, tipo_usuario) VALUES ('901000000', '99999999', 'Vargas', 'Marco', 'marco@gentlemen.com', 'Barbero123', 'BARBERO');
+
+
+
+INSERT INTO sedes (nombre_sede, direccion) VALUES ('Chorrillos', 'Av.Chorrillos');
+
+
+INSERT INTO sedes (nombre_sede, direccion) VALUES ('Surco', 'Av.Surco');
+
+
+INSERT INTO sedes (nombre_sede, direccion) VALUES ('Lince', 'Av.Lince');
+
+
+
+INSERT INTO administradores (id_usuario) VALUES (1);
+
+
+
+INSERT INTO barberos (id_usuario, id_sede) VALUES (2, 1);
+
+
+INSERT INTO barberos (id_usuario, id_sede) VALUES (3, 1);
+
+
+INSERT INTO barberos (id_usuario, id_sede) VALUES (4, 1);
+
+
+INSERT INTO barberos (id_usuario, id_sede) VALUES (5, 2);
+
+
+INSERT INTO barberos (id_usuario, id_sede) VALUES (6, 2);
+
+
+INSERT INTO barberos (id_usuario, id_sede) VALUES (7, 2);
+
+
+INSERT INTO barberos (id_usuario, id_sede) VALUES (8, 3);
+
+
+INSERT INTO barberos (id_usuario, id_sede) VALUES (9, 3);
+
+
+INSERT INTO barberos (id_usuario, id_sede) VALUES (10, 3);
+
+
+
+INSERT INTO categorias (nombre) VALUES ('Afeitado');
+
+
+INSERT INTO categorias (nombre) VALUES ('Tintes');
+
+
+INSERT INTO categorias (nombre) VALUES ('Lavado y cuidado del cabello');
+
+
+INSERT INTO categorias (nombre) VALUES ('Crecimiento y cuidado de barba');
+
+
+
+INSERT INTO productos (id_categoria, precio, stock, nombre, descripcion) VALUES (1, 80.00, 57, 'MOISTURIZING SHAVE CREAM 150 ML', 'La Crema de afeitar American Crew hidrata,calma y alivia las irritaciones de la piel y permite un afeitado apurado. La crema no espumosa crea una barrera protectora en la piel que permite que la cuchilla se deslize sin secar la piel.');
+
+
+INSERT INTO productos (id_categoria, precio, stock, nombre, descripcion) VALUES (1, 80.00, 44, 'REVIT TONER 150 ML', 'Suaviza la piel después de afeitar. Tonifica y refresca. Calma la irritación y humecta las áreas irritadas. Cierra los poros con una sensación de frescura.');
+
+
+INSERT INTO productos (id_categoria, precio, stock, nombre, descripcion) VALUES (2, 85.00, 61, 'DEVELOPER ACTIVATOR (OXIGENTA) 450 ML', 'American Crew Developer es un Activador de 15 vol (4.5%). Una emulsion reveladora para uso en conjunto de la coloración precision blend de American Crew.');
+
+
+INSERT INTO productos (id_categoria, precio, stock, nombre, descripcion) VALUES (2, 75.00, 76, 'TINTE PRECISION BLEND (CASTAÑO CENIZO)', 'PRESENTAMOS UN NUEVO SISTEMA DE COBERTURA DE CANAS EXCLUSIVO PARA ELLOS. CREA LA COLORACIÓN NATURAL QUE BUSCAN EN TAN SOLO CINCO MINUTOS.');
+
+
+INSERT INTO productos (id_categoria, precio, stock, nombre, descripcion) VALUES (3, 190.00, 20, 'SHAMPOO 3-EN-1 ENERGIZING GINGER+TEA 1L', 'Shampoo, acondicionador y Body Wash, formulado con aroma de energizante de jengibre y té. Inspirado en la aromacología te ayuda a sentirte despierto, lleno de energía y vigorizado.');
+
+
+INSERT INTO productos (id_categoria, precio, stock, nombre, descripcion) VALUES (3, 75.00, 34, 'SHAMPOO 3 EN 1 – TEA TREE – 250 ML', 'Shampoo, acondicionador y gel de ducha todo en uno. Para los chicos sencillos, sin complicaciones. El 3 IN 1 más eficaz del mercado Alivia el cuero cabelludo y la piel.');
+
+
+INSERT INTO productos (id_categoria, precio, stock, nombre, descripcion) VALUES (4, 115.00, 72, 'MR MUK HAIR, BEARD & BODY WASH 250ML', 'De la jungla urbana a un paraíso tropical, este es el único producto que te acompañará a donde quiera que vayas. Adecuado para todo tipo de cabello y piel.');
+
+
+INSERT INTO productos (id_categoria, precio, stock, nombre, descripcion) VALUES (4, 85.00, 53, 'BEARD SERUM 50 ML', 'Fórmula ligera y de rápida absorción. Una fórmula a base de aceite especialmente diseñada para el cuidado de la barba, con aceites beneficiosos que instantáneamente acondicionan.');
+
+
+
+INSERT INTO tipo_servicios (nombre) VALUES ('SERVICIOS INDIVIDUALES');
+
+
+INSERT INTO tipo_servicios (nombre) VALUES ('PAQUETES DE SERVICIOS');
+
+
+INSERT INTO tipo_servicios (nombre) VALUES ('TINTURACIÓN');
+
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (55.00, 'CORTE + LAVADO + PEINADO', 'Recibe una asesoría previa por parte de nuestro barbero, y mientras te corta el pelo, disfruta de una bebida de cortesía.', 1);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (40.00, 'ARREGLO/AFEITADO DE BARBA', 'El servicio incluye asesoramiento, arreglo, delineado de la barba o afeitado con toalla caliente, finalmente hidratamos.', 1);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (50.00, 'RITUAL DE BARBA', 'El servicio comenzará con una aplicación de pre-shave y colocación de la toalla caliente por 2 ó 3 minutos con masajes incluido para dejar tu piel suave.', 1);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (70.00, 'LIMPIEZA FACIAL', 'Relájese y limpie su rostro con una limpieza facial. Nuestro servicio de incluye vaporización de ozono con masajes en el rostro y cabeza + exfoliación + mascarilla negra.', 1);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (85.00, 'CORTE DE PELO + ARREGLO/AFEITADO DE BARBA.', '', 2);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (95.00, 'CORTE DE PELO + RITUAL DE BARBA.', '', 2);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (99.00, 'CORTE DE PELO + LIMPIEZA FACIAL', '', 2);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (89.00, 'ARREGLO/AFEITADO DE BARBA + LIMPIEZA FACIAL', '', 2);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (99.00, 'RITUAL DE BARBA + LIMPIEZA FACIAL', '', 2);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (124.00, 'CORTE DE PELO + ARREGLO/AFEITADO DE BARBA + LIMPIEZA FACIAL', '', 2);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (134.00, 'CORTE DE PELO + RITUAL DE BARBA + LIMPIEZA FACIAL', '', 2);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (80.00, 'CAMUFLAJE DE CANAS PARA PELO', 'Este tratamiento de color consigue rejuvenecer los pelos blancos de la cana consiguiendo un resultado muy natural', 3);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (40.00, 'CAMUFLAJE DE CANAS PARA BARBA', 'Este tratamiento de color consigue rejuvenecer los pelos blancos de la BARBA consiguiendo un resultado muy natural', 3);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (120.00, 'CORTE + CAMUFLAJE DE CANAS DE PELO', '', 3);
+
+
+INSERT INTO servicios (tarifa, nombre, detalle, id_tipo_servicio) VALUES (75.00, 'AFEITADO/ARREGLO Y CAMUFLAJE DE CANAS PARA BARBA', '', 3); 
