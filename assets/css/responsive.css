@@ -1,0 +1,43 @@
+/* ----------------------------------------------------------------
+   GENTLEMEN BARBER SHOP - 1.5 responsive.css
+   Ajustes de sitio responsive.
+---------------------------------------------------------------- */
+
+/* Adaptar tarjetas en dispositivos pequeños (ejemplo) */
+@media (max-width: 576px) {
+    /* En móviles, las tarjetas pueden verse un poco mejor con menos padding general */
+    .card-gentlemen {
+        margin-bottom: 1rem;
+    }
+    
+    /* Reducir márgenes y paddings generales */
+    .p-4 { padding: 1rem !important; }
+    .p-5 { padding: 1.5rem !important; }
+    
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.5rem; }
+}
+
+/* Ajustes para tabletas y móviles */
+@media (max-width: 991.98px) {
+    /* Reducir el tamaño de fuente en el menú de navegación */
+    .navbar-nav .nav-link {
+        font-size: 0.9rem;
+    }
+    
+    /* Asegurar que el logo y el nombre no se vean apretados */
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+
+    /* En el carrito, hacer que los ítems se apilen mejor si es necesario */
+    .list-group-item.d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .list-group-item.d-flex .ms-4 {
+        margin-left: 0 !important;
+        margin-top: 1rem;
+    }
+}

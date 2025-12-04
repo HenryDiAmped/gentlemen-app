@@ -1,0 +1,23 @@
+/* ----------------------------------------------------------------
+   GENTLEMEN BARBER SHOP - 1.4 forms.css
+   Estilos enfocados en formularios.
+---------------------------------------------------------------- */
+
+.form-control {
+    border-radius: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.form-control:focus {
+    border-color: #f39c12; /* Resalta el foco con el color primario */
+    box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25);
+}
+
+/* Estilo para mensajes de error debajo del campo */
+.mensaje-error {
+    color: #dc3545; /* Rojo de error */
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    display: block; /* Asegurar que ocupe su propia línea */
+}

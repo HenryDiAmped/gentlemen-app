@@ -1,0 +1,47 @@
+/* ----------------------------------------------------------------
+   GENTLEMEN BARBER SHOP - 1.2 layout.css
+   Estructura general de la página (header, nav, footer).
+---------------------------------------------------------------- */
+
+/* Encabezado (Header) */
+header {
+    /* Base style handled by Bootstrap (gentlemen-bg shadow-lg) */
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+}
+
+/* Navegación (Nav) */
+.navbar-nav .nav-link {
+    font-weight: 500;
+}
+
+.navbar-nav .nav-link.active {
+    /* Resaltar la página actual */
+    color: #f39c12 !important; /* Color primario */
+    border-bottom: 2px solid #f39c12;
+}
+
+/* Contenido General (Main) */
+main {
+    padding-top: 1rem; /* Espacio debajo del encabezado */
+    padding-bottom: 3rem;
+    min-height: calc(100vh - 80px); /* Ajuste mínimo de altura para el footer */
+}
+
+/* Pie de Página (Footer) */
+footer {
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+footer .text-secondary {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Para hacer la columna de resumen "sticky" en pantallas grandes (Bootstrap Helper) */
+@media (min-width: 992px) {
+    .sticky-lg {
+        position: sticky;
+        top: 1rem;
+    }
+}
